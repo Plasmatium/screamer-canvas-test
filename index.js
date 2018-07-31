@@ -28,6 +28,8 @@ class Wool {
     this.pos = [...Array(3).keys()].map(() => {
       return {x: random()*467+100, y: random()*600+100}
     })
+
+    this.timerIdArr = [-1, -1, -1]
   }
 
   drawRandomOnce (currPos, currDir) {
@@ -75,9 +77,13 @@ class Wool {
     }
   }
 
-  run () {
-    [0,1,2].forEach(idx => {
-      setInterval(() => {
+  runWool () {
+    // 清理马赛克
+    ctx.fillStyle = 'black'
+    ctx.fillRect(0, 0, 600, 800)
+
+    ;[0,1,2].forEach(idx => {
+      this.timerIdArr[idx] = setInterval(() => {
         this.goOneThread(idx)
       }, 33)
     })
@@ -92,7 +98,12 @@ class Wool {
     }, '#')
   }
 
-  testDraw () {
+  runMosaic () {
+    // 清理毛线团
+    ctx.fillStyle = 'black'
+    ctx.fillRect(0, 0, 600, 800)
+    ;[0, 1, 2].forEach(idx => clearInterval(this.timerIdArr[idx]))
+
     for (let x = 0; x < 467; x += 7) {
       for (let y = 0; y < 600; y += 7) {
         let color = this.getPosColor({x, y})
@@ -106,12 +117,11 @@ class Wool {
       }
     }
   }
-
-  testRandDraw () {
-    for (let x=0; x<1000; x++) {
-      let x = random
-    }
-  }
 }
 
 const w = new Wool()
+const btn1 = document.getElementById('btn1')
+const btn2 = document.getElementById('btn2')
+
+btn1.onclick = () => w.runMosaic()
+btn2.onclick = () => w.runWool()
